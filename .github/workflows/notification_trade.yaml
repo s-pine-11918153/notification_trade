@@ -1,7 +1,7 @@
 name: Stock Monitor
 on:
   schedule:
-    - cron: '0 * * * *'  # 毎時実行
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -12,8 +12,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install requests
+
       - run: pip install yfinance requests python-dotenv
+
       - run: python chack_trade.py
       - run: python notion_insert.py
       - run: python test_check_and_notify.py
@@ -21,29 +22,3 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-
-name: Cleanup old workflow runs
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * *"  # 毎日
-
-jobs:
-  cleanup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Delete old runs, keep only latest 2
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # ワークフローIDを取得
-          WORKFLOW_ID=$(gh workflow list --limit 1 --json id -q '.[0].id')
-
-          # 実行一覧を取得（最新2件を除く）
-          RUN_IDS=$(gh run list --workflow $WORKFLOW_ID --json databaseId -q '.[2:] | .[].databaseId')
-
-          # 古い実行を削除
-          for ID in $RUN_IDS; do
-            echo "Deleting run $ID"
-            gh run delete $ID --confirm
-          done
