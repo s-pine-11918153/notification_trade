@@ -32,5 +32,5 @@ jobs:
           # 古い実行を削除
           for ID in $RUN_IDS; do
             echo "Deleting run $ID"
-            gh run delete $ID --yes
+            gh run delete $ID
           done
