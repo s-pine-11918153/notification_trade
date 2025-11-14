@@ -11,7 +11,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup GitHub CLI
+      - name: Install GitHub CLI
         run: |
           sudo apt-get update
           sudo apt-get install -y jq gh
@@ -20,18 +20,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # cleanup したい workflow 名
           TARGET_WORKFLOW="Stock Monitor"
 
-          # 対象 workflow の ID を取得
+          # ワークフロー ID を取得
           WORKFLOW_ID=$(gh workflow list --json id,name -q ".[] | select(.name==\"$TARGET_WORKFLOW\") | .id")
-
           echo "Workflow ID: $WORKFLOW_ID"
 
-          # 実行履歴を取得（最新2件以降）
+          # 最新2件を除く実行一覧を取得
           RUN_IDS=$(gh run list --workflow $WORKFLOW_ID --json databaseId -q '.[2:] | .[].databaseId')
 
+          # 古い実行を削除
           for ID in $RUN_IDS; do
             echo "Deleting run $ID"
-            gh run delete $ID --confirm
+            gh run delete $ID --yes
           done
