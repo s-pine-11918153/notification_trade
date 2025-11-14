@@ -2,12 +2,15 @@ name: Cleanup old workflow runs
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *"  # 毎日
+    - cron: "0 0 * * *"
 
 jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Setup GitHub CLI
         run: |
           sudo apt-get update
@@ -17,8 +20,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          WORKFLOW_ID=$(gh workflow list --json id,name -q '.[] | select(.name=="Stock Monitor") | .id')
+          # cleanup したい workflow 名
+          TARGET_WORKFLOW="Stock Monitor"
 
+          # 対象 workflow の ID を取得
+          WORKFLOW_ID=$(gh workflow list --json id,name -q ".[] | select(.name==\"$TARGET_WORKFLOW\") | .id")
+
+          echo "Workflow ID: $WORKFLOW_ID"
+
+          # 実行履歴を取得（最新2件以降）
           RUN_IDS=$(gh run list --workflow $WORKFLOW_ID --json databaseId -q '.[2:] | .[].databaseId')
 
           for ID in $RUN_IDS; do
