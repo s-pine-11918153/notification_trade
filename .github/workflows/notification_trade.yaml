@@ -15,7 +15,7 @@ jobs:
       - run: pip install requests
       - run: pip install yfinance requests python-dotenv
       - run: python chack_trade.py
-      - run: python notion_isert.py
+      - run: python notion_insert.py
       - run: python test_check_and_notify.py
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
