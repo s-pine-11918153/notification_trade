@@ -1,2 +1,2 @@
-- First, inter the command as follows:
+- First, inter the command as follows: \\
 --git clone https://github.com/s-pine-11918153/notification_trade
