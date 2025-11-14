@@ -16,10 +16,10 @@ data = {
     "parent": {"database_id": DATABASE_ID},
     "properties": {
         "銘柄名": {
-            "title": [{"text": {"content": "テスト銘柄A"}}]
+            "title": [{"text": {"content": "Stock"}}]
         },
         "ティッカーコード": {
-            "rich_text": [{"text": {"content": "7203.T"}}]
+            "rich_text": [{"text": {"content": "Ticker"}}]
         },
         "通知条件": {
             "rich_text": [{"text": {"content": "price > 3000"}}]
