@@ -18,6 +18,7 @@ jobs:
 
       - name: Delete old runs, keep only latest 2
         env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TARGET_WORKFLOW="Stock Monitor"
