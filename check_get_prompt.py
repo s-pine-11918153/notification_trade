@@ -74,6 +74,11 @@ else:
             print(f"{stock_name} ({ticker_code}) 更新失敗: {r.status_code} {r.text}")
         
         # Discord に送信
+        notify_checkbox = page["properties"].get("Allow_notification", {}).get("checkbox", False)
+        if not notify_checkbox:
+            print(f"{stock_name} の通知はOFFです。スキップします。")
+        continue
+
         price_str = f"{close_price:,.0f} 円" if close_price is not None else "データなし"
         content = f"銘柄: {stock_name}\nティッカー: {ticker_code}\n株価: {price_str}"
         payload = {"content": content}
