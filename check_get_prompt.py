@@ -66,7 +66,10 @@ else:
                 print(f"{ticker_code}: データが存在しません")
             else:
                 close_price = hist["Close"].iloc[-1]
-                print(f"{ticker_code}: 現在値 {close_price} 円")
+                if country_name == "Japan":
+                    print(f"{ticker_code}: 現在値 {close_price} 円")
+                elif country_name == "US":
+                    print(f"{ticker_code}: 現在値 {close_price} $")
         except Exception as e:
             print(f"{ticker_code}: 株価取得でエラー発生 - {e}")
             close_price = None
