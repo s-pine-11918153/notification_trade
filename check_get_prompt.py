@@ -35,9 +35,9 @@ else:
         ticker = page["properties"]["Ticker"]["rich_text"]
         ticker_code_raw = ticker[0]["text"]["content"] if ticker else ""
 
-        if counrty_name == Japan
+        if counrty_name == "Japan":
             ticker_code = f"{ticker_code_raw}.T" 
-        else if counrty_name == US
+        else if counrty_name == "US":
             ticker_code = f"{ticker_code_raw}" 
         if ticker_code_raw else None
 
