@@ -17,8 +17,8 @@ jobs:
       
       - name: Debug NOTION_TOKEN
         run: |
-          echo "Token length: ${#NOTION_TOKEN}"
-          echo "Database ID: $NOTION_DATABASE_ID"
+          echo "Token length: ${{ secrets.NOTION_TOKEN }}"
+          echo "Database ID:  ${{ secrets.NOTION_DATABASE_ID }}"
     
       - run: python chack_trade.py
       - run: python notion_insert.py
