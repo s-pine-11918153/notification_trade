@@ -2,8 +2,11 @@ import os
 import requests
 from datetime import datetime
 
-NOTION_TOKEN = os.getenv("NOTION_TOKEN")
-DATABASE_ID = os.getenv("NOTION_DATABASE_ID_FOR_TRADE")
+#NOTION_TOKEN = os.getenv("NOTION_TOKEN")
+#DATABASE_ID = os.getenv("NOTION_DATABASE_ID")
+
+NOTION_TOKEN = "ntn_D13056195468umhPDc31lA1N4kVVFWJK1wCEkuiewaBggO"
+DATABASE_ID = "2ab04dd22c5a8062a7b8c49fd7d63c27"
 
 url = "https://api.notion.com/v1/pages"
 headers = {
@@ -32,5 +35,5 @@ data = {
 }
 
 response = requests.post(url, headers=headers, json=data)
-print("Status code:", response.status_code)
+print("Status:", response.status_code)
 print(response.text)
