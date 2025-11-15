@@ -56,6 +56,20 @@ else:
         except Exception as e:
             print(f"{ticker_code}: 株価取得でエラー発生 - {e}")
 
+        # --- Notion ページ更新 ---
+        update_url = f"https://api.notion.com/v1/pages/{page_id}"
+        data = {
+            "properties": {
+                "Price": {"number": close_price} if price is not None else None,
+                "URL": {"url": f"https://finance.yahoo.com/quote/{yf_ticker}"}
+           }
+        }
+        r = requests.patch(update_url, headers=headers, json=data)
+        if r.status_code == 200:
+            print(f"{stock_name} ({ticker_code}) 更新成功: 株価={close_price}")
+        else:
+            print(f"{stock_name} ({ticker_code}) 更新失敗: {r.status_code} {r.text}")
+        
         # Discord に送信
         content = f"銘柄: {stock_name}\nティッカー: {ticker_code}\n株価: {close_price}"
         payload = {"content": content}
