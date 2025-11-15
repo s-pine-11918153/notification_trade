@@ -25,8 +25,7 @@ jobs:
           echo "Token length: ${#NOTION_TOKEN}"
           echo "Database ID length: ${#NOTION_DATABASE_ID}"
 
-      - run: python chack_trade.py
       - run: python get_stock_information.py
       - run: python check_get_prompt.py
-     # - run: python notion_insert.py
-      - run: python notification_trade.py
+      #- run: python prototype_notion_insert.py
+      #- run: python notification_trade.py
