@@ -76,7 +76,7 @@ else:
             "properties": {
                  "Stock_name": {
                     "title": [{"type": "text", "text": {"content": stock_name}}]
-                }
+                 },
                 "Price": {"number": close_price} if close_price is not None else {"number": None},
                 "URL": {"url": f"https://finance.yahoo.com/quote/{ticker_code}"}
             }
