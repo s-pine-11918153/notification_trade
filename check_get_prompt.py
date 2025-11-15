@@ -49,6 +49,7 @@ else:
             yf_stock = yf.Ticker(ticker_code)
             hist = yf_stock.history(period="1d")
             if hist.empty:
+                close_price = None
                 print(f"{ticker_code}: データが存在しません")
             else:
                 close_price = hist["Close"].iloc[-1]
@@ -57,11 +58,13 @@ else:
             print(f"{ticker_code}: 株価取得でエラー発生 - {e}")
 
         # Notionページ更新
-        update_url = f"https://api.notion.com/v1/pages/{page_id}"  # page_id はここで定義済み
+        page_id = page["id"]
+        
+        update_url = f"https://api.notion.com/v1/pages/{page_id}"
         data = {
             "properties": {
-                "Price": {"number": close_price} if price is not None else None,
-                "URL": {"url": f"https://finance.yahoo.com/quote/{yf_ticker}"}
+                "Price": {"number": close_price} if close_price is not None else None,
+                "URL": {"url": f"https://finance.yahoo.com/quote/{ticker_code}"}
             }
         }
         r = requests.patch(update_url, headers=headers, json=data)
@@ -71,7 +74,8 @@ else:
             print(f"{stock_name} ({ticker_code}) 更新失敗: {r.status_code} {r.text}")
         
         # Discord に送信
-        content = f"銘柄: {stock_name}\nティッカー: {ticker_code}\n株価: {close_price}"
+        price_str = f"{close_price:,.0f} 円" if close_price is not None else "データなし"
+        content = f"銘柄: {stock_name}\nティッカー: {ticker_code}\n株価: {price_str}"
         payload = {"content": content}
         
         try:
