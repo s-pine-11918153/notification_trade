@@ -37,8 +37,9 @@ else:
 
         if counrty_name == "Japan":
             ticker_code = f"{ticker_code_raw}.T" 
-        else if counrty_name == "US":
+        elif counrty_name == "US":
             ticker_code = f"{ticker_code_raw}" 
+            
         if ticker_code_raw else None
 
         condition = page["properties"]["condition"]["select"]
