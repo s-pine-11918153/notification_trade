@@ -28,4 +28,4 @@ jobs:
       - run: python chack_trade.py
       - run: python get_stock_information.py
       - run: python notion_insert.py
-      - run: python test_check_and_notify.py
+      - run: python notification_trade.py
