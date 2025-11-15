@@ -28,19 +28,20 @@ else:
         # --- 各プロパティ取得 ---
         country = page["properties"]["Country"]["select"]
         country_name = country["name"] if country else "None"
-        
+
         stock = page["properties"]["Stock"]["title"]
         stock_name = stock[0]["text"]["content"] if stock else "Unknown"
 
         ticker = page["properties"]["Ticker"]["rich_text"]
         ticker_code_raw = ticker[0]["text"]["content"] if ticker else ""
 
-        if counrty_name == "Japan":
-            ticker_code = f"{ticker_code_raw}.T" 
-        elif counrty_name == "US":
-            ticker_code = f"{ticker_code_raw}" 
-            
-        if ticker_code_raw else None
+        # --- 国によってティッカー加工 ---
+        if country_name == "Japan":
+            ticker_code = f"{ticker_code_raw}.T" if ticker_code_raw else None
+        elif country_name == "US":
+            ticker_code = ticker_code_raw if ticker_code_raw else None
+        else:
+            ticker_code = ticker_code_raw if ticker_code_raw else None
 
         condition = page["properties"]["condition"]["select"]
         condition_name = condition["name"] if condition else "None"
