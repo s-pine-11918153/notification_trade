@@ -4,6 +4,7 @@ import yfinance as yf
 
 NOTION_TOKEN = os.getenv("NOTION_TOKEN")
 DATABASE_ID = os.getenv("NOTION_DATABASE_ID")
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
 headers = {
     "Authorization": f"Bearer {NOTION_TOKEN}",
@@ -54,3 +55,15 @@ else:
                 print(f"{ticker_code}: 現在値 {close_price} 円")
         except Exception as e:
             print(f"{ticker_code}: 株価取得でエラー発生 - {e}")
+
+        # Discord に送信
+        content = f"銘柄: {stock_name}\nティッカー: {ticker_code}\n株価: {price_str}"
+        payload = {"content": content}
+        
+        try:
+            r = requests.post(DISCORD_WEBHOOK_URL, json=payload)
+            print(f"Discord status: {r.status_code}")
+            print(f"Discord response: {r.text}")
+            r.raise_for_status()
+        except Exception as e:
+            print(f"Discord 送信エラー: {e}")
