@@ -3,7 +3,7 @@ import requests
 from datetime import datetime
 
 NOTION_TOKEN = os.getenv("NOTION_TOKEN")
-DATABASE_ID = os.getenv("NOTION_DATABASE_ID")
+DATABASE_ID = os.getenv("NOTION_DATABASE_ID_FOR_TRADE")
 
 url = "https://api.notion.com/v1/pages"
 headers = {
@@ -12,24 +12,25 @@ headers = {
     "Content-Type": "application/json"
 }
 
+# テスト用に最小限のデータで挿入
 data = {
     "parent": {"database_id": DATABASE_ID},
     "properties": {
-        "銘柄名": {
-            "title": [{"text": {"content": "Stock"}}]
+        "Stock": {
+            "title": [{"text": {"content": "Test Stock"}}]
         },
-        "ティッカーコード": {
-            "rich_text": [{"text": {"content": "Ticker"}}]
+        "Ticker": {
+            "rich_text": [{"text": {"content": "TST"}}]
         },
-        "通知条件": {
-            "rich_text": [{"text": {"content": "price > 3000"}}]
+        "condition": {
+            "select": {"name": "price > 3000"}
         },
-        "通知期限": {
+        "Deadline_Date": {
             "date": {"start": "2025-12-31"}
         }
     }
 }
 
 response = requests.post(url, headers=headers, json=data)
-print("Status:", response.status_code)
+print("Status code:", response.status_code)
 print(response.text)
