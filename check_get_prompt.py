@@ -87,6 +87,7 @@ else:
                 "URL": {"url": f"https://finance.yahoo.com/quote/{ticker_code}"}
             }
         }
+        yf_URL = f"https://finance.yahoo.com/quote/{ticker_code}"
         r = requests.patch(update_url, headers=headers, json=data)
 
         if r.status_code == 200:
@@ -102,10 +103,12 @@ else:
 
         # --- Discord 通知 ---
         if country_name == "Japan":
-            price_str = f"{close_price:,.0f} 円" if close_price is not None else "データなし"
+            price_str = f"{close_price:,.0f} 円"
         elif country_name == "US":
-            price_str = f"{close_price:,.0f} $" if close_price is not None else "データなし"
-        content = f"銘柄: {stock_name}\nティッカー: {ticker_code}\n株価: {price_str}\nURL: {"https://finance.yahoo.com/quote/{ticker_code}"}\n\n"
+            price_str = f"{close_price:,.0f} $"
+        else:
+            price_str = f"{close_price:,.0f}"
+        content = f"銘柄: {stock_name}\nティッカー: {ticker_code}\n株価: {price_str}\nURL: {yf_URL}\n\n"
         payload = {"content": content}
 
         try:
