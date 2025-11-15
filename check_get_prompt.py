@@ -56,13 +56,13 @@ else:
         except Exception as e:
             print(f"{ticker_code}: 株価取得でエラー発生 - {e}")
 
-        # --- Notion ページ更新 ---
-        update_url = f"https://api.notion.com/v1/pages/{page_id}"
+        # Notionページ更新
+        update_url = f"https://api.notion.com/v1/pages/{page_id}"  # page_id はここで定義済み
         data = {
             "properties": {
                 "Price": {"number": close_price} if price is not None else None,
                 "URL": {"url": f"https://finance.yahoo.com/quote/{yf_ticker}"}
-           }
+            }
         }
         r = requests.patch(update_url, headers=headers, json=data)
         if r.status_code == 200:
