@@ -71,7 +71,7 @@ else:
             print(f"{ticker_code}: 株価取得でエラー発生 - {e}")
             close_price = None
 
-        if yf_stcok_name != stock_name:
+        if yf_stock_name != stock_name:
             stock_name = yf_stcok_name
         # --- Notionページ更新 ---
         update_url = f"https://api.notion.com/v1/pages/{page_id}"
