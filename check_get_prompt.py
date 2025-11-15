@@ -28,6 +28,8 @@ else:
         ticker = page["properties"]["Ticker"]["rich_text"]
         ticker_code = ticker[0]["text"]["content"] if ticker else "Unknown"
 
+        ticker_code = f"{ticker_code}.T"　#Yahoo Financeでの日本株はティッカーコードの後に.Tをつける必要あり。
+
         condition = page["properties"]["condition"]["select"]
         condition_name = condition["name"] if condition else "None"
 
