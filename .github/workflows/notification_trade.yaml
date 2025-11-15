@@ -7,6 +7,11 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+    env:
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -14,19 +19,12 @@ jobs:
           python-version: '3.11'
 
       - run: pip install yfinance requests python-dotenv
-      
-      - name: Debug NOTION_TOKEN
+
+      - name: Debug env
         run: |
-          echo "Token length: ${{ secrets.NOTION_TOKEN }}"
-          echo "Database ID:  ${{ secrets.NOTION_DATABASE_ID }}"
-    
+          echo "Token length: ${#NOTION_TOKEN}"
+          echo "Database ID length: ${#NOTION_DATABASE_ID}"
+
       - run: python chack_trade.py
       - run: python notion_insert.py
       - run: python test_check_and_notify.py
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-
-
-
