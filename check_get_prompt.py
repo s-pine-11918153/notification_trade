@@ -26,12 +26,20 @@ else:
         page_id = page["id"]
 
         # --- 各プロパティ取得 ---
+        country = page["properties"]["Country"]["select"]
+        country_name = country["name"] if country else "None"
+        
         stock = page["properties"]["Stock"]["title"]
         stock_name = stock[0]["text"]["content"] if stock else "Unknown"
 
         ticker = page["properties"]["Ticker"]["rich_text"]
         ticker_code_raw = ticker[0]["text"]["content"] if ticker else ""
-        ticker_code = f"{ticker_code_raw}.T" if ticker_code_raw else None
+
+        if counrty_name == Japan
+            ticker_code = f"{ticker_code_raw}.T" 
+        else if counrty_name == US
+            ticker_code = f"{ticker_code_raw}" 
+        if ticker_code_raw else None
 
         condition = page["properties"]["condition"]["select"]
         condition_name = condition["name"] if condition else "None"
