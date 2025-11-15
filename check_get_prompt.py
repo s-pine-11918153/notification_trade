@@ -105,7 +105,7 @@ else:
             price_str = f"{close_price:,.0f} 円" if close_price is not None else "データなし"
         elif country_name == "US":
             price_str = f"{close_price:,.0f} $" if close_price is not None else "データなし"
-        content = f"銘柄: {stock_name}\nティッカー: {ticker_code}\n株価: {price_str}\nURL: {https://finance.yahoo.com/quote/{ticker_code}}\n\n"
+        content = f"銘柄: {stock_name}\nティッカー: {ticker_code}\n株価: {price_str}\nURL: {"https://finance.yahoo.com/quote/{ticker_code}"}\n\n"
         payload = {"content": content}
 
         try:
