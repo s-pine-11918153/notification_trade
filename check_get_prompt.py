@@ -23,13 +23,15 @@ if not pages:
     print("ページが存在しません")
 else:
     for page in pages:
+        page_id = page["id"]
+
+        # --- 各プロパティ取得 ---
         stock = page["properties"]["Stock"]["title"]
         stock_name = stock[0]["text"]["content"] if stock else "Unknown"
 
         ticker = page["properties"]["Ticker"]["rich_text"]
-        ticker_code = ticker[0]["text"]["content"] if ticker else "Unknown"
-
-        ticker_code = f"{ticker_code}.T" #Yahoo Financeでの日本株はティッカーコードの後に.Tをつける必要あり。
+        ticker_code_raw = ticker[0]["text"]["content"] if ticker else ""
+        ticker_code = f"{ticker_code_raw}.T" if ticker_code_raw else None
 
         condition = page["properties"]["condition"]["select"]
         condition_name = condition["name"] if condition else "None"
@@ -37,12 +39,12 @@ else:
         deadline = page["properties"]["Deadline_Date"]["date"]
         deadline_date = deadline["start"] if deadline else "None"
 
-        
+        print(f"Stock: {stock_name}, Ticker: {ticker_code}, Condition: {condition_name}, Deadline: {deadline_date}")
+
+        # --- ティッカーが無い場合スキップ ---
         if not ticker_code:
             print(f"{stock_name} のティッカーコードが存在しません。スキップします。")
             continue
-            
-        print(f"Stock: {stock_name}, Ticker: {ticker_code}, Condition: {condition_name}, Deadline: {deadline_date}")
 
         # --- yfinance で株価取得 ---
         try:
@@ -56,37 +58,36 @@ else:
                 print(f"{ticker_code}: 現在値 {close_price} 円")
         except Exception as e:
             print(f"{ticker_code}: 株価取得でエラー発生 - {e}")
+            close_price = None
 
-        # Notionページ更新
-        page_id = page["id"]
-        
+        # --- Notionページ更新 ---
         update_url = f"https://api.notion.com/v1/pages/{page_id}"
         data = {
             "properties": {
-                "Price": {"number": close_price} if close_price is not None else None,
+                "Price": {"number": close_price} if close_price is not None else {"number": None},
                 "URL": {"url": f"https://finance.yahoo.com/quote/{ticker_code}"}
             }
         }
         r = requests.patch(update_url, headers=headers, json=data)
+
         if r.status_code == 200:
             print(f"{stock_name} ({ticker_code}) 更新成功: 株価={close_price}")
         else:
             print(f"{stock_name} ({ticker_code}) 更新失敗: {r.status_code} {r.text}")
-        
-        # Discord に送信
-        notify_checkbox = page["properties"].get("Allow_notification", {}).get("checkbox", False)
-        if not notify_checkbox:
-            print(f"{stock_name} の通知はOFFです。スキップします。")
-        continue
 
+        # --- 通知可否チェック ---
+        notify = page["properties"].get("Allow_notification", {}).get("checkbox", False)
+        if not notify:
+            print(f"{stock_name} の通知はOFFです。スキップします。")
+            continue
+
+        # --- Discord 通知 ---
         price_str = f"{close_price:,.0f} 円" if close_price is not None else "データなし"
         content = f"銘柄: {stock_name}\nティッカー: {ticker_code}\n株価: {price_str}"
         payload = {"content": content}
-        
+
         try:
             r = requests.post(DISCORD_WEBHOOK_URL, json=payload)
             print(f"Discord status: {r.status_code}")
-            print(f"Discord response: {r.text}")
-            r.raise_for_status()
         except Exception as e:
             print(f"Discord 送信エラー: {e}")
