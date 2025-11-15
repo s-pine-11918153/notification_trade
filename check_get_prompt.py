@@ -57,7 +57,7 @@ else:
             print(f"{ticker_code}: 株価取得でエラー発生 - {e}")
 
         # Discord に送信
-        content = f"銘柄: {stock_name}\nティッカー: {ticker_code}\n株価: {price_str}"
+        content = f"銘柄: {stock_name}\nティッカー: {ticker_code}\n株価: {close_price}"
         payload = {"content": content}
         
         try:
