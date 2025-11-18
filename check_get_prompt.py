@@ -9,7 +9,7 @@ DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # GitHub Personal Access Token
 REPO = os.getenv("REPO")  # ex) "user/repo-name"
 
-WORKFLOW_NAME = "Notion Update Check"  # 保存するワークフロー名
+WORKFLOW_NAME = "Stock Monitor"  # 保存するワークフロー名
 MAX_RUNS_TO_KEEP = 1  # 💡最新3件のワークフローだけ残す
 
 # --- Notion 共通ヘッダ ---
