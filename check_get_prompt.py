@@ -116,3 +116,40 @@ else:
             print(f"Discord status: {r.status_code}")
         except Exception as e:
             print(f"Discord 送信エラー: {e}")
+
+        # --- 古いワークフローを削除 ---
+        def cleanup_old_workflow_runs():
+            headers = {
+                "Authorization": f"Bearer {GITHUB_TOKEN}",
+                "Accept": "application/vnd.github+json",
+            }
+            wf_resp = requests.get(
+                f"https://api.github.com/repos/{REPO}/actions/workflows",
+                headers=headers,
+            )
+            wf_resp.raise_for_status()
+            workflows = wf_resp.json().get("workflows", [])
+            workflow_id = None
+            for wf in workflows:
+                if wf["name"] == WORKFLOW_NAME:
+                    workflow_id = wf["id"]
+                    break
+                if not workflow_id:
+                    print(f"[WARN] Workflow '{WORKFLOW_NAME}' not found")
+                return
+
+                runs_resp = requests.get(
+                    f"https://api.github.com/repos/{REPO}/actions/workflows/{workflow_id}/runs?per_page=100",
+                    headers=headers,
+                )
+                runs_resp.raise_for_status()
+                runs = runs_resp.json().get("workflow_runs", [])
+
+                for run in runs[2:]:
+                    run_id = run["id"]
+                    del_resp = requests.delete(
+                        f"https://api.github.com/repos/{REPO}/actions/runs/{run_id}",
+                        headers=headers,
+                    )
+                    if del_resp.status_code not in (204, 200):
+                        print(f"[WARN] Failed to delete run {run_id}: {del_resp.status_code}")
