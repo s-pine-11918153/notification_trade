@@ -5,6 +5,10 @@ import yfinance as yf
 NOTION_TOKEN = os.getenv("NOTION_TOKEN")
 DATABASE_ID = os.getenv("NOTION_DATABASE_ID")
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+REPO = os.getenv("GITHUB_REPOSITORY")
+
+WORKFLOW_NAME = "Notion Update Check"
 
 headers = {
     "Authorization": f"Bearer {NOTION_TOKEN}",
