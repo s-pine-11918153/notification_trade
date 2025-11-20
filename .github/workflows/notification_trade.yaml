@@ -11,6 +11,9 @@ jobs:
       NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+      REPO: ${{ github.repository }}
+
 
     steps:
       - uses: actions/checkout@v4
